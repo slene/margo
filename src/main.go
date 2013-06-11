@@ -99,8 +99,8 @@ func margo_test() {
 }
 
 func main() {
-	margo_test()
-	return
+	// margo_test()
+	// return
 
 	do := "-"
 	poll := 0
