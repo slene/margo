@@ -63,13 +63,23 @@ func margo_test() {
 	flags.Parse(os.Args[1:])
 
 	d := &goApi{}
-	d.Fn = "/project/works/tiger/week_3/suffix_expression/src/node/node.go"
+
+	d.Fn = "/project/works/test/src/main.go"
 	d.Env = map[string]string{
 		"GOROOT": "/usr/local/go",
 		"GOARCH": "amd64",
-		"GOPATH": "/usr/local/go/share:/project/works/tiger/week_3/suffix_expression",
+		"GOPATH": "/project/works/test",
 		"GOOS":   "darwin",
 	}
+
+	d.Fn = `C:\project\src\main.go`
+	d.Env = map[string]string{
+		"GOROOT": `C:\go`,
+		"GOARCH": "386",
+		"GOPATH": `C:\project`,
+		"GOOS":   "windows",
+	}
+
 	d.TabIndent = true
 	d.TabWidth = 8
 	d.Offset = offset
@@ -89,8 +99,8 @@ func margo_test() {
 }
 
 func main() {
-	// margo_test()
-	// return
+	margo_test()
+	return
 
 	do := "-"
 	poll := 0
