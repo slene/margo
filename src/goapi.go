@@ -173,6 +173,13 @@ type goApi struct {
 func (m *goApi) Call() (interface{}, string) {
 	res := []*Doc{}
 
+	if runtime.GOOS == "windows" {
+		if m.Offset > len(m.Src) {
+			m.Offset = len(m.Src)
+		}
+		m.Offset += strings.Count(m.Src[:m.Offset], "\t") * 3
+	}
+
 	dir, file := filepath.Split(m.Fn)
 
 	pkgs := []string{dir}
@@ -374,7 +381,6 @@ lookup:
 					}
 				}
 			}
-
 			return w.fset.Position(info.T.Pos()), info
 			// fmt.Println("pos,", w.fset.Position(info.T.Pos()))
 		}
