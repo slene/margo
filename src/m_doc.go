@@ -85,7 +85,7 @@ func (m *mDoc) Call() (interface{}, string) {
 }
 
 func init() {
-	registry.Register("doc", func(_ *Broker) Caller {
+	registry.Register("doc2", func(_ *Broker) Caller {
 		return &mDoc{
 			Env: map[string]string{},
 		}

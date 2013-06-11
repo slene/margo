@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"runtime"
@@ -55,7 +56,42 @@ func byeDefer(f func()) {
 	}
 }
 
+func margo_test() {
+	offset := 0
+	flags := flag.NewFlagSet("MarGo", flag.ExitOnError)
+	flags.IntVar(&offset, "o", offset, "")
+	flags.Parse(os.Args[1:])
+
+	d := &goApi{}
+	d.Fn = "/project/works/tiger/week_3/suffix_expression/src/node/node.go"
+	d.Env = map[string]string{
+		"GOROOT": "/usr/local/go",
+		"GOARCH": "amd64",
+		"GOPATH": "/usr/local/go/share:/project/works/tiger/week_3/suffix_expression",
+		"GOOS":   "darwin",
+	}
+	d.TabIndent = true
+	d.TabWidth = 8
+	d.Offset = offset
+
+	data, _ := ioutil.ReadFile(d.Fn)
+	d.Src = string(data)
+	a, b := d.Call()
+	c := a.([]*Doc)
+	if len(c) > 0 {
+		e := c[0]
+		fmt.Println(*e)
+	}
+	if len(b) > 0 {
+		fmt.Println(b)
+	}
+	fmt.Println("end")
+}
+
 func main() {
+	// margo_test()
+	// return
+
 	do := "-"
 	poll := 0
 	wait := false
