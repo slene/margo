@@ -193,6 +193,10 @@ func (m *goApi) Call() (interface{}, string) {
 	context.GOARCH = m.Env["GOARCH"]
 	context.CgoEnabled = m.Env["CGO_ENABLED"] == "1"
 
+	if context.GOOS == "" {
+		context.GOOS = runtime.GOOS
+	}
+
 	pos, info := GoApi(&line, pkgs, contexts)
 
 	if pos.IsValid() {
