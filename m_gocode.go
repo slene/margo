@@ -1,10 +1,10 @@
 package main
 
 import (
+	"github.com/slene/margo/gosublime.org/gocode"
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"gosublime.org/gocode"
 	"io/ioutil"
 	"os"
 	"path/filepath"

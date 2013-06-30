@@ -1,11 +1,11 @@
 package main
 
 import (
+	"github.com/slene/margo/gosublime.org/types"
 	"go/ast"
 	"go/parser"
 	"go/scanner"
 	"go/token"
-	"gosublime.org/types"
 	"regexp"
 	"strconv"
 )
