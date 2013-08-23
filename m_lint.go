@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/slene/margo/gosublime.org/types"
 	"go/ast"
 	"go/parser"
 	"go/scanner"
 	"go/token"
 	"regexp"
 	"strconv"
+
+	"github.com/slene/margo/something-borrowed/types"
 )
 
 type mLintReport struct {

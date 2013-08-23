@@ -558,7 +558,12 @@ func lookup_pkg(tp type_path, scope *scope) string {
 
 func type_to_decl(t ast.Expr, scope *scope) *decl {
 	tp := get_type_path(t)
-	return lookup_path(tp, scope)
+	d := lookup_path(tp, scope)
+	if d != nil && d.class == decl_var {
+		// weird variable declaration pointing to itself
+		return nil
+	}
+	return d
 }
 
 func expr_to_decl(e ast.Expr, scope *scope) *decl {
@@ -931,6 +936,12 @@ func (d *decl) infer_type() (ast.Expr, *scope) {
 }
 
 func (d *decl) find_child(name string) *decl {
+	if d.flags&decl_visited != 0 {
+		return nil
+	}
+	d.flags |= decl_visited
+	defer d.clear_visited()
+
 	if d.children != nil {
 		if c, ok := d.children[name]; ok {
 			return c

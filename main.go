@@ -21,6 +21,7 @@ var (
 	byeFuncs *byeFunc = nil
 	numbers           = &counter{}
 	logger            = log.New(os.Stderr, "margo: ", log.Ldate|log.Ltime|log.Lshortfile)
+	sendCh            = make(chan Response, 100)
 )
 
 type counter struct {
@@ -32,6 +33,12 @@ func (c *counter) next() uint64 {
 	c.lck.Lock()
 	defer c.lck.Unlock()
 	c.n += 1
+	return c.n
+}
+
+func (c *counter) val() uint64 {
+	c.lck.Lock()
+	defer c.lck.Unlock()
 	return c.n
 }
 
@@ -64,21 +71,21 @@ func margo_test() {
 
 	d := &goApi{}
 
-	d.Fn = "/project/works/test/src/main.go"
+	d.Fn = "/project/works/open/src/orm/main.go"
 	d.Env = map[string]string{
 		"GOROOT": "/usr/local/go",
 		"GOARCH": "amd64",
-		"GOPATH": "/project/works/test",
+		"GOPATH": "/project/works/open/",
 		"GOOS":   "darwin",
 	}
 
-	d.Fn = `C:\project\src\main.go`
-	d.Env = map[string]string{
-		"GOROOT": `C:\go`,
-		"GOARCH": "386",
-		"GOPATH": `C:\project`,
-		"GOOS":   "windows",
-	}
+	// d.Fn = `C:\project\src\main.go`
+	// d.Env = map[string]string{
+	// 	"GOROOT": `C:\go`,
+	// 	"GOARCH": "386",
+	// 	"GOPATH": `C:\project`,
+	// 	"GOOS":   "windows",
+	// }
 
 	d.TabIndent = true
 	d.TabWidth = 8
@@ -169,6 +176,13 @@ func main() {
 			}
 		}()
 	}
+
+	go func() {
+		for r := range sendCh {
+			broker.SendNoLog(r)
+		}
+	}()
+
 	broker.Loop(!doCall, (wait || doCall))
 
 	byeLck.Lock()

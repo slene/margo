@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/slene/margo/gosublime.org/gocode"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -11,6 +10,8 @@ import (
 	"runtime"
 	"strings"
 	"sync"
+
+	"github.com/slene/margo/something-borrowed/gocode"
 )
 
 const (
@@ -29,6 +30,7 @@ type mGocodeOptions struct {
 }
 
 type mGocodeComplete struct {
+	Autoinst bool
 	Env      map[string]string
 	Home     string
 	Dir      string
@@ -120,7 +122,15 @@ func (m *mGocodeComplete) Call() (interface{}, string) {
 	if m.calltip {
 		res["calltips"] = completeCalltip(src, fn, pos)
 	} else {
-		res["completions"] = gocode.GoSublimeGocodeComplete(src, fn, pos)
+		l := gocode.GoSublimeGocodeComplete(src, fn, pos)
+		res["completions"] = l
+
+		if m.Autoinst && len(l) == 0 {
+			autoInstall(AutoInstOptions{
+				Src: m.Src,
+				Env: m.Env,
+			})
+		}
 	}
 
 	return res, e
