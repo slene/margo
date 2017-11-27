@@ -1,10 +1,10 @@
-###About this repo
+### About this repo
 
 Fork from [GoSublime](https://github.com/DisposaBoy/GoSublime)
 
 Add [liteide](https://github.com/visualfc/liteide) goapi tools instead GoSublime margo Goto Definition
 
-###Usage
+### Usage
 
 build margo
 
